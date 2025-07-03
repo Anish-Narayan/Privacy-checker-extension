@@ -1,79 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Privacy Proxy Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Checker</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        button { margin-right: 10px; padding: 10px; cursor: pointer; }
-        table { width: 100%; margin-top: 20px; border-collapse: collapse; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background-color: #f4f4f4; }
-        .tracker { color: red; font-weight: bold; }
-        .no-tracker { color: green; font-weight: bold; }
+        body { font-family: Arial, sans-serif; text-align: center; margin: 50px; }
+        input { padding: 10px; width: 300px; }
+        button { padding: 10px 20px; cursor: pointer; }
+        .result { margin-top: 20px; font-size: 1.2em; font-weight: bold; }
     </style>
 </head>
 <body>
-    <h1>Privacy Proxy Dashboard</h1>
-    <button onclick="startProxy()">Start Proxy</button>
-    <button onclick="fetchLogs()">Refresh Logs</button>
-
-    <h2>Intercepted Requests</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>URL</th>
-                <th>Known Trackers</th>
-                <th>ML Detection</th>
-            </tr>
-        </thead>
-        <tbody id="log-table">
-        </tbody>
-    </table>
-
-    <script>
-        function startProxy() {
-            fetch('/start_proxy', {method: 'POST'})
-                .then(response => response.json())
-                .then(data => alert(data.status))
-                .catch(err => alert('Failed to start proxy'));
-        }
-
-        function fetchLogs() {
-            fetch('/logs')
-                .then(response => response.json())
-                .then(displayLogs)
-                .catch(err => alert('Failed to fetch logs'));
-        }
-
-        function displayLogs(logs) {
-            const table = document.getElementById('log-table');
-            table.innerHTML = '';
-
-            logs.forEach(log => {
-                const row = document.createElement('tr');
-
-                // URL column
-                const urlCell = document.createElement('td');
-                urlCell.textContent = log.url;
-                row.appendChild(urlCell);
-
-                // Known Trackers column
-                const knownCell = document.createElement('td');
-                knownCell.innerHTML = log.known_trackers.length ? 
-                    `<span class="tracker">${log.known_trackers.join(', ')}</span>` : 
-                    `<span class="no-tracker">None</span>`;
-                row.appendChild(knownCell);
-
-                // ML Detection column
-                const mlCell = document.createElement('td');
-                mlCell.innerHTML = log.ml_tracker ? 
-                    `<span class="tracker">Tracker Detected</span>` : 
-                    `<span class="no-tracker">No Tracker</span>`;
-                row.appendChild(mlCell);
-
-                table.appendChild(row);
-            });
-        }
-    </script>
+    <h2>Check if a URL has a Tracker</h2>
+    <form method="POST">
+        <input type="text" name="url" placeholder="Enter URL" required>
+        <button type="submit">Check</button>
+    </form>
+    
+    {% if result %}
+        <div class="result">Result: {{ result }}</div>
+    {% endif %}
 </body>
 </html>
