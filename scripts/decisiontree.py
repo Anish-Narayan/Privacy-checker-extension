@@ -55,7 +55,7 @@ plot_tree(
     filled=True,
     feature_names=vectorizer.get_feature_names_out(),
     class_names=[str(cls) for cls in model.classes_],
-    max_depth=2
+    max_depth=5
 )
 plt.title("🌳 Decision Tree Visualization (Top 2 Levels)")
 plt.tight_layout()
